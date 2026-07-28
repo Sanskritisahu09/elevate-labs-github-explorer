@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('search-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            const query e.target.value.trim();
+            const query = e.target.value.trim();
             if (query) fetchGitHubRepos(query);
         }
     });
