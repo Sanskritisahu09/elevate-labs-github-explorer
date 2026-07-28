@@ -3,56 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Open Source Explorer</title>
-    <!-- Tailwind CSS CDN -->
+    <title>GitAnalytics Pro | Open Source Explorer</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased">
 
-    <!-- Header -->
-    <header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-50 backdrop-blur">
+    <!-- Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight text-indigo-400">GitAnalytics <span class="text-xs text-slate-500 font-normal">v1.0</span></h1>
-            <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">Live REST API</span>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">G</div>
+                <h1 class="text-lg font-bold tracking-tight text-white">GitAnalytics <span class="text-xs text-indigo-400 font-normal ml-2">PRO</span></h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="rate-limit-badge" class="text-xs text-slate-400 bg-slate-800/80 px-3 py-1.5 rounded-md border border-slate-700/60 font-mono">
+                    API Status: Ready
+                </span>
+            </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-8">
-        <!-- Controls Section -->
-        <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <input type="text" id="search-input" placeholder="Search topic (e.g. react, python)..." 
-                class="md:col-span-2 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500">
-            
-            <select id="language-filter" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500">
-                <option value="">All Languages</option>
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="typescript">TypeScript</option>
-                <option value="java">Java</option>
-                <option value="cpp">C++</option>
-            </select>
+    <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        
+        <!-- Search & Control Panel -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div class="md:col-span-5 relative">
+                    <input type="text" id="search-input" placeholder="Search topic or keyword (e.g. react, machine-learning)..." 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100 placeholder-slate-500 transition">
+                </div>
+                
+                <div class="md:col-span-3">
+                    <select id="language-filter" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100 transition">
+                        <option value="">All Primary Languages</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="typescript">TypeScript</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="go">Go</option>
+                        <option value="rust">Rust</option>
+                    </select>
+                </div>
 
-            <button id="search-btn" class="bg-indigo-600 hover:bg-indigo-500 font-semibold text-sm px-6 py-3 rounded-lg transition">
-                Fetch Analytics
-            </button>
-        </section>
+                <div class="md:col-span-2">
+                    <select id="sort-filter" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100 transition">
+                        <option value="stars">Most Stars</option>
+                        <option value="forks">Most Forks</option>
+                        <option value="updated">Recently Updated</option>
+                    </select>
+                </div>
 
-        <!-- Analytics Chart -->
-        <section class="bg-slate-800/50 border border-slate-800 rounded-xl p-6 mb-8">
-            <h2 class="text-base font-semibold mb-4 text-slate-300">Stars Comparison (Top 10 Results)</h2>
-            <div class="h-64 relative">
-                <canvas id="starsChart"></canvas>
+                <div class="md:col-span-2">
+                    <button id="search-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 font-semibold text-sm py-3 rounded-xl transition shadow-lg shadow-indigo-600/20 active:scale-[0.98]">
+                        Explore Repos
+                    </button>
+                </div>
             </div>
         </section>
 
-        <!-- Repositories Grid -->
-        <section>
-            <h2 class="text-lg font-semibold mb-4 text-slate-200">Repository Feed</h2>
+        <!-- Analytics Visualizations Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Popularity Matrix (Top 10)</h2>
+                    <span class="text-xs text-slate-500">Stars Count</span>
+                </div>
+                <div class="h-64 relative w-full">
+                    <canvas id="starsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Language Share</h2>
+                    <span class="text-xs text-slate-500">Top Results</span>
+                </div>
+                <div class="h-64 relative w-full flex items-center justify-center">
+                    <canvas id="languageChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Controls & Main Grid -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex gap-6">
+                    <button id="tab-all" class="text-sm font-semibold text-indigo-400 border-b-2 border-indigo-500 pb-3 -mb-3 transition">All Repositories</button>
+                    <button id="tab-bookmarks" class="text-sm font-semibold text-slate-400 hover:text-slate-200 pb-3 -mb-3 transition flex items-center gap-2">
+                        Saved Bookmarks <span id="bookmark-count" class="bg-slate-800 text-xs px-2 py-0.5 rounded-full text-slate-300">0</span>
+                    </button>
+                </div>
+            </div>
+
             <div id="repo-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Cards will render dynamically here -->
+                <!-- Cards render dynamically -->
             </div>
         </section>
     </main>
