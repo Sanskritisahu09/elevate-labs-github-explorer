@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Open Source Explorer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-50 backdrop-blur">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-tight text-indigo-400">GitAnalytics <span class="text-xs text-slate-500 font-normal">v1.0</span></h1>
+            <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">Live REST API</span>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Controls Section -->
+        <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <input type="text" id="search-input" placeholder="Search topic (e.g. react, python)..." 
+                class="md:col-span-2 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500">
+            
+            <select id="language-filter" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500">
+                <option value="">All Languages</option>
+                <option value="javascript">JavaScript</option>
+                <option value="python">Python</option>
+                <option value="typescript">TypeScript</option>
+                <option value="java">Java</option>
+                <option value="cpp">C++</option>
+            </select>
+
+            <button id="search-btn" class="bg-indigo-600 hover:bg-indigo-500 font-semibold text-sm px-6 py-3 rounded-lg transition">
+                Fetch Analytics
+            </button>
+        </section>
+
+        <!-- Analytics Chart -->
+        <section class="bg-slate-800/50 border border-slate-800 rounded-xl p-6 mb-8">
+            <h2 class="text-base font-semibold mb-4 text-slate-300">Stars Comparison (Top 10 Results)</h2>
+            <div class="h-64 relative">
+                <canvas id="starsChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Repositories Grid -->
+        <section>
+            <h2 class="text-lg font-semibold mb-4 text-slate-200">Repository Feed</h2>
+            <div id="repo-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards will render dynamically here -->
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
